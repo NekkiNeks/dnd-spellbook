@@ -1,0 +1,76 @@
+/* Адаптивность */
+@media (min-width: 1000px) {
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 10px
+    }
+}
+
+.container {
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header h1 {
+    font-family: "Jacquard 12", monospace;
+    font-size: 46px;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.selector-wrapper {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.selector-wrapper label {
+    font-weight: bold;
+    color: var(--foreground);
+}
+
+.class-dropdown {
+    padding: 10px 15px;
+    font-size: 16px;
+    width: 100%;
+    background-color: var(--background);
+    /* Твой темный фон */
+    color: var(--foreground);
+    border: 1px solid var(--accent);
+    /* Твой акцентный красный */
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.class-dropdown:focus {
+    border-color: var(--accent);
+}
+
+/* Стилизация опций внутри списка (поддерживается не во всех браузерах полностью) */
+.class-dropdown option {
+    background-color: var(--background);
+    color: var(--foreground);
+    padding: 10px;
+}
+
+.grid {}
+
+
+
+
+
+.error {
+    color: var(--accent);
+    text-align: center;
+    margin: 2rem;
+}
+
+.loader {
+    text-align: center;
+    margin: 2rem;
+    font-style: italic;
+}

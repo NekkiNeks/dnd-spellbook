@@ -1,0 +1,27 @@
+:root {
+  --accent: #39baf5;
+  --background: #212121;
+  --foreground: #fdfdfd;
+  --light: #eaf4c1;
+  --purple: #8567fa;
+  --green: #51ad79;
+  --orange: #f67e6a;
+  --blue: #39baf5;
+  --grey: #a3ab87;
+  --dark-grey: #484641;
+
+  background-color: var(--background);
+  color: var(--foreground);
+
+}
+
+*, 
+*:before, 
+*:after {
+  box-sizing: border-box;
+  font-family: "JetBrains Mono", monospace;
+  margin: 0;
+  padding: 0;
+
+}
+

@@ -1,0 +1,52 @@
+.level-filter-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--background);
+    border-top: 2px solid var(--accent);
+    padding: 10px 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+}
+
+.filter-grid {
+    display: grid;
+    /* 5 колонок в ряду */
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    width: 95%;
+    max-width: 500px;
+    /* Чтобы на десктопе кнопки не были гигантскими */
+}
+
+.level-btn {
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--foreground);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.2s;
+    border-radius: 4px;
+}
+
+.level-btn.active {
+    background-color: var(--accent);
+    color: white;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.level-btn:hover {
+    border-color: var(--accent);
+}
+
+/* Адаптив для совсем маленьких экранов */
+@media (max-width: 400px) {
+    .level-btn {
+        padding: 8px 4px;
+        font-size: 12px;
+    }
+}

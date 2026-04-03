@@ -1,0 +1,37 @@
+services:
+  # Бэкенд на Express + TypeScript
+  backend:
+    image: node:20-alpine
+    container_name: csv-backend
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+      # Прокидываем папку с ассетами, если она в корне (опционально)
+      # - ./assets:/app/assets 
+    ports:
+      - "3333:3333"
+    environment:
+      - NODE_ENV=development
+    # Устанавливаем зависимости и запускаем через ts-node/nodemon
+    command: >
+      sh -c "npm install && npm run dev"
+
+  # Фронтенд на Vite + Preact + TypeScript
+  frontend:
+    image: node:20-alpine
+    container_name: csv-frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3333
+    # Зависимость от бэкенда (фронт стартует после)
+    depends_on:
+      - backend
+    # Устанавливаем зависимости и запускаем vite --host
+    command: >
+      sh -c "npm install && npm run dev:docker"
+
+

@@ -1,0 +1,18 @@
+[
+    {
+        "name":"headliner",
+        "displayName":"Хедлайнер",
+        "url":"http://headliner.podcast.foo",
+        "image": "headliner_thumbnail.jpg"
+    },{
+        "name":"vinilomania",
+        "displayName":"Виниломания",
+        "url":"http://vinilomania.podcast.foo",
+        "image": "vinilomania_thumbnail.jpg"
+    },{
+        "name":"neshow",
+        "displayName":"Не Шоу",
+        "url":"http://neshow.podcast.foo",
+        "image": "neshow_thumbnail.jpg"
+    }
+]
