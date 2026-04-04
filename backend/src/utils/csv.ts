@@ -19,7 +19,7 @@ export async function parseCsvFile(filename: string): Promise<Record<string, any
         fs.createReadStream(filePath)
             .pipe(csv({
                 separator: ';',
-                headers: ['level', 'name', 'type', 'time', 'distance', 'foo', 'duration', 'text', 'owner']
+                headers: ['id', 'level', 'name', 'type', 'time', 'distance', 'components', 'duration', 'text', 'owner']
             }))
             .on('data', (data) => results.push(data))
             .on('end', () => resolve(results))

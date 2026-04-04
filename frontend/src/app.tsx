@@ -4,27 +4,45 @@ import { LevelFilter } from './components/LevelFilter';
 import { ClassSelector } from './components/ClassSelector';
 import './styles/app.css'
 import type { ISpell, CharClass } from './types';
+import {
+    clearIdsInLocalStorage,
+    removeIdFromLocalStorage,
+    addIdToLocalStorage,
+    getIdsFromLocalStorage,
+    getClassFromLocalStorage,
+    setClassToLocalStorage,
+} from './functions/localhost'
+import { updateColorByClass } from './functions/colors';
 
-const CLASSES: CharClass[] = [
-    "artificer", "bard", "cleric", "druid",
-    "paladin", "ranger", "sorcerer", "warlock", "wizard"
-];
+// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = `http://${window.location.hostname}:3333`;
 
-/**
- * Функция для очистки названия от текста в квадратных скобках
- * Например: "Fireball [Wizard]" -> "Fireball"
- */
-const formatName = (name: string): string => {
-    return name.replace(/\[[^\]]*\]/g, '').trim();
-};
+async function apiRequest<T>(url: string): Promise<T> {
+    try {
+        // Проверка на наличие переменной
+        if (!API_URL) throw new Error('В переменных окружения отуствует переменная VITE_API_URL')
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Ошибка при запросе к API: ${response.status}`)
+
+        const result = await response.json();
+        const data = result.data as T
+
+        return data;
+    } catch (error) {
+        throw error
+    }
+}
 
 export function App() {
     // Состояния
-    const [selectedClass, setSelectedClass] = useState<CharClass>(CLASSES[0]);
+    const [selectedClass, setSelectedClass] = useState<CharClass>(getClassFromLocalStorage());
     const [spells, setSpells] = useState<ISpell[]>([]);
     const [activeLevels, setActiveLevels] = useState<Set<number>>(new Set());
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [showPrepared, setShowPrepared] = useState<boolean>(false)
+    const [firstLoad, setFirstLoad] = useState<boolean>(true)
 
     // Загрузка данных при смене класса
     useEffect(() => {
@@ -32,19 +50,23 @@ export function App() {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`http://localhost:3333/spells/${selectedClass}`);
-                if (!response.ok) throw new Error(`Ошибка сервера: ${response.status}`);
+                let data = await apiRequest<ISpell[]>(`${API_URL}/spells/${selectedClass}`)
 
-                const result = await response.json();
-                const data: ISpell[] = Array.isArray(result) ? result : result.data;
+                if (firstLoad) {
+                    // Получение ID из localStorage
+                    const savedIds = getIdsFromLocalStorage()
 
-                // Сразу при получении очищаем имена во всем массиве
-                const cleanedData = data.map(s => ({
-                    ...s,
-                    name: formatName(s.name)
-                }));
+                    data = data.map(spell => ({
+                        ...spell,
+                        prepared: savedIds.has(spell.id)
+                    }));
 
-                setSpells(cleanedData);
+                    updateColorByClass(selectedClass)
+
+                    setFirstLoad(false)
+                }
+
+                setSpells(data);
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'Не удалось загрузить данные');
             } finally {
@@ -55,8 +77,30 @@ export function App() {
         fetchSpells();
     }, [selectedClass]);
 
+    // ФИЛЬТРАЦИЯ ЗАКЛИНАНИЙ
+    const filteredSpells = useMemo(() => {
+        return spells.filter(spell => {
+            // 1. Фильтр по уровню: 
+            const matchesLevel = activeLevels.size === 0 || activeLevels.has(parseInt(spell.level));
+
+            // 2. Фильтр по подготовке: 
+            const matchesPrepared = !showPrepared || spell.prepared === true;
+
+            // Заклинание остается в массиве, только если оба условия выполнены
+            return matchesLevel && matchesPrepared;
+        });
+    }, [spells, activeLevels, showPrepared]);
+
+    // Обработчик смены класса (логика остается прежней, запросы пойдут по value)
+    function handleClassChange(newClass: CharClass) {
+        setSelectedClass(newClass);
+        setClassToLocalStorage(newClass)
+        updateColorByClass(newClass)
+        setActiveLevels(new Set()); // Сбрасываем уровни при смене класса
+    };
+
     // Логика переключения уровней в фильтре
-    const toggleLevel = (level: number) => {
+    function toggleLevel(level: number) {
         const newLevels = new Set(activeLevels);
         if (newLevels.has(level)) {
             newLevels.delete(level);
@@ -66,22 +110,35 @@ export function App() {
         setActiveLevels(newLevels);
     };
 
-    // Фильтрация: если Set пустой — показываем всё, если нет — только выбранные уровни
-    const filteredSpells = useMemo(() => {
-        if (activeLevels.size === 0) return spells;
-        return spells.filter(s => activeLevels.has(parseInt(s.level)));
-    }, [spells, activeLevels]);
+    // ЗАГОТОВЛЕННЫЕ ЗАКЛИНАНИЯ
 
-    // Обработчик смены класса (логика остается прежней, запросы пойдут по value)
-    const handleClassChange = (newClass: CharClass) => {
-        setSelectedClass(newClass);
-        setActiveLevels(new Set()); // Сбрасываем уровни при смене класса
-    };
+    function enablePrepared(spellId: string) {
+        const newSpells = spells.map(spell => spell.id === spellId ? { ...spell, prepared: true } : spell)
+        addIdToLocalStorage(spellId)
+        setSpells(newSpells)
+    }
+    function disablePrepared(spellId: string) {
+        const newSpells = spells.map(spell => spell.id === spellId ? { ...spell, prepared: false } : spell)
+        removeIdFromLocalStorage(spellId)
+        setSpells(newSpells)
+    }
+
+    function clearPrepared() {
+        const newSpells = spells.map(spell => {
+            return { ...spell, prepared: false }
+        })
+        clearIdsInLocalStorage()
+        setSpells(newSpells)
+    }
+
+    function toggleShowPrepared() {
+        setShowPrepared(!showPrepared)
+    }
 
     return (
         <div className="container">
             <header>
-                <h1>D&D 5e Spellbook</h1>
+                <h1>D&D 5.5 Spellbook</h1>
 
                 <ClassSelector
                     selectedClass={selectedClass}
@@ -95,10 +152,12 @@ export function App() {
                 <div className="loader">Изучение магических свитков...</div>
             ) : (
                 <div className="grid">
-                    {filteredSpells.map((spell, index) => (
+                    {filteredSpells.map(spell => (
                         <SpellCard
-                            key={`${selectedClass}-${spell.name}-${index}`}
+                            key={spell.id}
                             spell={spell}
+                            enablePrepared={enablePrepared}
+                            disablePrepared={disablePrepared}
                         />
                     ))}
                 </div>
@@ -108,6 +167,9 @@ export function App() {
             <LevelFilter
                 activeLevels={activeLevels}
                 toggleLevel={toggleLevel}
+                togglePrepared={toggleShowPrepared}
+                handleClearPrepared={clearPrepared}
+                showPrepared={showPrepared}
             />
         </div>
     );

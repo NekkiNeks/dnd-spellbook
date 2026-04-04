@@ -12,15 +12,15 @@
 }
 
 .card.prepared {
-    border-color: var(--green);
+    border-color: var(--class-color);
 }
 
 .card.prepared .level {
-    background-color: var(--green);
+    background-color: var(--class-color);
 }
 
 .card.prepared .prepare-button {
-    border-color: var(--green);
+    border-color: var(--class-color);
 }
 
 /* .card:not(:last-child) { */
@@ -36,11 +36,10 @@
 .card-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .card-body {
-    margin-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
     display: none;
 }
 
@@ -57,32 +56,42 @@
 .level {
     background: var(--accent);
     margin-right: 7px;
-    padding: 2px 8px;
+    padding: 4px 8px;
     border-radius: 4px;
-    font-size: 9px;
+    font-size: 10px;
     font-weight: bold;
-    min-width: 44px
+    min-width: 50px;
+    text-align: center;
 }
 
 /* .card.opened {} */
 
 .name {
     margin: 0;
-    font-size: 12px;
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+}
+
+.card-header .components {
+    font-size: 10px;
+    padding-left: 10px;
 }
 
 .card-body p {
-    margin: 0.4rem 0;
-    font-size: 0.9rem;
+    margin: 5px 0;
+    line-height: 20px;
+    font-size: 14px;
     color: #ccc;
 }
 
 .description {
-    font-size: 8px;
+    font-size: 6px;
     line-height: 1.4;
 }
 
 .card .prepare-button {
+    margin-bottom: 10px;
     background-color: var(--background);
     width: 100%;
     padding: 10px;

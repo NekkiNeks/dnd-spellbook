@@ -8,7 +8,7 @@ const port = 3333
 // Настройки CORS для приложения (Имеют смысл только при запуске через webview)
 app.use(
     cors({
-        origin: 'http://localhost:5173',
+        origin: '*',
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['content-Type', 'Authorization']
     }))

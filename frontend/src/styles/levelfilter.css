@@ -5,9 +5,10 @@
     width: 100%;
     background: var(--background);
     border-top: 2px solid var(--accent);
-    padding: 10px 0;
+    padding: 10px;
     z-index: 1000;
     display: flex;
+    flex-direction: column;
     justify-content: center;
 }
 
@@ -16,12 +17,12 @@
     /* 5 колонок в ряду */
     grid-template-columns: repeat(5, 1fr);
     gap: 8px;
-    width: 95%;
+    width: 100%;
     max-width: 500px;
     /* Чтобы на десктопе кнопки не были гигантскими */
 }
 
-.level-btn {
+.button {
     padding: 10px;
     background: transparent;
     border: 1px solid var(--accent);
@@ -33,9 +34,19 @@
     border-radius: 4px;
 }
 
+.button.active {
+    background-color: var(--accent);
+}
+
+.prepared-buttons {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+}
+
 .level-btn.active {
     background-color: var(--accent);
-    color: white;
+    color: var(--foreground);
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
 }
 

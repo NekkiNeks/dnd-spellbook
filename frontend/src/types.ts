@@ -1,14 +1,16 @@
 export interface ISpell {
-    id: number;
+    id: string;
     level: string;
     name: string;
     type: string;
     time: string;
     distance: string;
-    foo: string;
+    components: string;
+    resources: string | null;
     duration: string;
     text: string;
     owner: string;
+    prepared: boolean;
 }
 
 export type CharClass =

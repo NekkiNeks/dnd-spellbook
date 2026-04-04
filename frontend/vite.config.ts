@@ -1,14 +1,17 @@
-import { defineConfig } from 'vite'
-import preact from '@preact/preset-vite'
+import { defineConfig, loadEnv } from 'vite';
 
 // https://vite.dev/config/
-export default defineConfig({
-    plugins: [preact()],
-    server: {
-        host: '0.0.0.0', // Позволяет подключаться к контейнеру извне
-        port: 5173,      // Стандартный порт Vite
-        watch: {
-            usePolling: true, // Нужно для корректного отслеживания изменений в Docker на Windows/macOS
+export default defineConfig(({ mode }) => {
+    // Загружаем переменные окружения из .env и системных переменных
+    const env = loadEnv(mode, process.cwd(), '');
+
+    return {
+        server: {
+            host: '0.0.0.0',
+            port: 5173,
+            allowedHosts: env.VITE_ALLOWED_HOSTS
+                ? env.VITE_ALLOWED_HOSTS.split(',')
+                : true, // Если переменная не задана, разрешаем все (удобно для дева)
         },
-    }
-})
+    };
+});
