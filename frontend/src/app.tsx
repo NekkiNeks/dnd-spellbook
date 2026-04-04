@@ -52,19 +52,16 @@ export function App() {
             try {
                 let data = await apiRequest<ISpell[]>(`${API_URL}/spells/${selectedClass}`)
 
-                if (firstLoad) {
-                    // Получение ID из localStorage
-                    const savedIds = getIdsFromLocalStorage()
+                // Получение ID из localStorage
+                const savedIds = getIdsFromLocalStorage()
 
-                    data = data.map(spell => ({
-                        ...spell,
-                        prepared: savedIds.has(spell.id)
-                    }));
+                data = data.map(spell => ({
+                    ...spell,
+                    prepared: savedIds.has(spell.id)
+                }));
 
-                    updateColorByClass(selectedClass)
+                updateColorByClass(selectedClass)
 
-                    setFirstLoad(false)
-                }
 
                 setSpells(data);
             } catch (err) {
@@ -128,6 +125,7 @@ export function App() {
             return { ...spell, prepared: false }
         })
         clearIdsInLocalStorage()
+        setShowPrepared(false)
         setSpells(newSpells)
     }
 
