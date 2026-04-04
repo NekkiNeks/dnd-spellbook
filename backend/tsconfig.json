@@ -1,23 +1,32 @@
 {
   "compilerOptions": {
-    "esModuleInterop": true,
-    "module": "commonjs",
-    "declaration": false,
-    "removeComments": true,
-    "resolveJsonModule": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
+    /* Основные настройки */
     "target": "ES2021",
-    "sourceMap": true,
+    "module": "NodeNext",              // Современный стандарт для Node.js
+    "moduleResolution": "NodeNext",
     "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "rootDir": "./",                   // Явно указываем корень исходников
+    
+    /* Совместимость */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,              // Игнорировать ошибки в библиотеках (ускоряет билд)
+    "forceConsistentCasingInFileNames": true,
+
+    /* Ошибки и предупреждения */
+    "ignoreDeprecations": "5.0",       // Убирает то самое предупреждение про baseUrl
+    "sourceMap": true,
+    "incremental": true,               // Ускоряет повторные сборки
+
+    /* Декораторы (если используешь библиотеки типа TypeORM или Class-validator) */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    /* Строгость (у тебя она была занижена, оставляю как есть, чтобы ничего не сломалось) */
+    "strict": false,
+    "noImplicitAny": false
+  },
+  "include": ["**/*.ts"],              // Указываем, какие файлы компилировать
+  "exclude": ["node_modules", "dist"]  // Что игнорировать
 }

@@ -1,4 +1,5 @@
 import '../styles/levelfilter.css'
+import { useState } from 'preact/hooks';
 
 interface LevelFilterProps {
     activeLevels: Set<number>;
@@ -11,8 +12,16 @@ interface LevelFilterProps {
 export function LevelFilter({ activeLevels, toggleLevel, showPrepared, togglePrepared, handleClearPrepared }: LevelFilterProps) {
     const levels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+    const [hidden, setHidden] = useState(false)
+
+    function toggleHidden() {
+        setHidden(!hidden)
+    }
+
     return (
-        <div className="level-filter-fixed">
+        <div className={hidden ? "level-filter-fixed hidden" : "level-filter-fixed"}>
+            <button className="hide-btn" onClick={toggleHidden}> {hidden ? 'Показать' : 'Спрятать'} </button>
+
             <div className="filter-grid">
                 {levels.map((lvl) => (
                     <button

@@ -4,12 +4,31 @@
     left: 0;
     width: 100%;
     background: var(--background);
-    border-top: 2px solid var(--accent);
+    border-top: 1px solid var(--accent);
     padding: 10px;
+    padding-bottom: calc(15px + env(safe-area-inset-bottom));
     z-index: 1000;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    transition: all 0.3s;
+    transform: translateY(0);
+}
+
+.level-filter-fixed.hidden {
+    transform: translateY(100%);
+}
+
+.hide-btn {
+    background-color: var(--background);
+    color: var(--foreground);
+    border: 1px solid var(--accent);
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    font-size: 15px;
+    position: absolute;
+    top: -37px;
 }
 
 .filter-grid {
@@ -18,8 +37,6 @@
     grid-template-columns: repeat(5, 1fr);
     gap: 8px;
     width: 100%;
-    max-width: 500px;
-    /* Чтобы на десктопе кнопки не были гигантскими */
 }
 
 .button {
@@ -32,25 +49,27 @@
     font-size: 14px;
     transition: all 0.2s;
     border-radius: 4px;
+    width: 100%;
 }
 
 .button.active {
-    background-color: var(--accent);
+    background-color: var(--class-color);
+    border-color: var(--class-color);
 }
 
 .prepared-buttons {
     margin-top: 8px;
+    width: 100%;
     display: flex;
     gap: 8px;
 }
 
 .level-btn.active {
-    background-color: var(--accent);
     color: var(--foreground);
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.level-btn:hover {
+.button:hover {
     border-color: var(--accent);
 }
 

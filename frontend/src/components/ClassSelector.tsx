@@ -1,4 +1,3 @@
-
 import type { CharClass } from '../types';
 
 // Словарь соответствий: техническое имя -> русское имя
@@ -22,6 +21,7 @@ interface ClassSelectorProps {
 export function ClassSelector({ selectedClass, onClassChange }: ClassSelectorProps) {
     // Список ключей из нашего словаря
     const classes = Object.keys(CLASS_LABELS) as CharClass[];
+
 
     return (
         <div className="selector-wrapper">

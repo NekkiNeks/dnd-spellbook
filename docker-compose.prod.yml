@@ -1,0 +1,18 @@
+services:
+  # Наш API
+  backend:
+    build: ./backend
+    container_name: dnd-api
+    ports:
+      - "3333:3333"
+    restart: always
+
+  # Наш Сайт
+  frontend:
+    build: ./frontend
+    container_name: dnd-app
+    ports:
+      - "80:80" # Теперь фронт на стандартном 80 порту (без :5173)
+    restart: always
+    depends_on:
+      - backend
