@@ -42,7 +42,6 @@ export function App() {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [showPrepared, setShowPrepared] = useState<boolean>(false)
-    const [firstLoad, setFirstLoad] = useState<boolean>(true)
 
     // Загрузка данных при смене класса
     useEffect(() => {
